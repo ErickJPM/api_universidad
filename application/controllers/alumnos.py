@@ -7,6 +7,7 @@ render = web.template.render('application/views/')
 class Alumnos:
     def GET(self):
         try:
+            app_version="0.0"
             datos=web.input()
             if datos['token']=="1234":
                 result=[]
@@ -16,6 +17,7 @@ class Alumnos:
                         reader = csv.DictReader(csvfile)
                         for row in reader:
                             result.append(row)
+                            result2['app_version']=app_version
                             result2['status']="200 ok"
                             result2['alumnos']=result
                     return json.dumps(result2) 
