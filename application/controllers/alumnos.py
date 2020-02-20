@@ -7,7 +7,7 @@ import csv
 class Alumnos:
     def GET(self):
         try:
-            app_version="0.0"
+            app_version="0.1.0"
             datos=web.input()
             if datos['token']=="1234":
                 result=[]
