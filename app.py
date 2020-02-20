@@ -9,7 +9,7 @@ render = web.template.render('templates/')
 
 
 
-
+##probando funciones
 
 if __name__ == "__main__":
     web.config.debug= False
