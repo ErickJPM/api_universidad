@@ -1,8 +1,7 @@
-import web  # pip installl web.py
+import web  # pip install web.py
 
 urls = (
-    '/alumnos/?', 'application.controllers.alumnos.Alumnos',  # /= raiz  Hello la clase 
-    '/static/' , 'application.controllers.error.Error'
+    '/alumnos/?', 'application.controllers.alumnos.Alumnos'  # /= raiz  Hello la clase 
 )
 app = web.application(urls, globals())
 
