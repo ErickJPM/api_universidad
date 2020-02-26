@@ -5,7 +5,7 @@ import csv
 
 class Alumnos:
     file="/static/csv/alumnos.csv"
-    app_version="0.1.0"
+
     def __init__(self):
         pass
 
@@ -14,13 +14,16 @@ class Alumnos:
             datos=web.input()
             if datos['token']=="1234":
                 if datos['action']=="get":
+		    app_version="0.1.0"
                     result2=self.optionget(self.app_version,self.file)
                     return json.dumps(result2)
                 elif datos['action']=="search":
+	            app_version="0.2.0"
                     matricula=datos['matricula']
                     result2=self.optionsearch(self.app_version,self.file,matricula)
                     return json.dumps(result2)
                 elif datos['action']=="put":
+		    app_version="0.3.0"
                     matricula=datos['matricula']
                     nombre=datos['nombre']
                     primer_apellido=datos['apellido1']
@@ -29,13 +32,25 @@ class Alumnos:
                     result2=self.optionput(self.app_version,self.file,matricula,nombre,primer_apellido,segundo_apellido,carrera)
                     return json.dumps(result2)
                 elif datos['action']=="delete":
+		    app_version="0.4.0"
                     matricula=datos['matricula']
                     result2=self.optiondelete(self.app_version,self.file,matricula)
                     return json.dumps(result2)
                 elif datos['action']=="help":
+		    app_version="1.0.0"
                     help=datos['action']
                     result=self.optionhelp(self.app_version,self.file,help)
                     return json.dumps(result)
+                elif datos['action']=="update":
+		    app_version="0.5.0"
+                    matricula=datos['matricula']
+                    matricula2=datos['matricula2']
+                    nombre=datos['nombre']
+                    primer_apellido=datos['apellido1']
+                    segundo_apellido=datos['apellido2']
+                    carrera=datos['carrera']
+                    result2=self.optionupdate(self.app_version,self.file,matricula,matricula2,nombre,primer_apellido,segundo_apellido,carrera)
+                    return json.dumps(result2)
                 else:
                     result2={}
                     result2['status']="Command not found"
@@ -181,5 +196,61 @@ class Alumnos:
             result['version']=app_version
             result['status']="ErrorD"
             return json.dumps(result)
-    
 
+    
+    @staticmethod
+    def optionupdate(app_version,file,matricula,matricula2,nombre,primer_apellido,segundo_apellido,carrera):
+        try:
+                result=[]
+                result2={}
+                with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        if(row['matricula']!=matricula):
+                            result2['app_version']=app_version
+                            result2['status']="200 ok"
+                            result.append(row)
+                            result2['alumnos']=result
+                tam=(len(result))
+                with open('static/csv/alumnos.csv','w',newline='') as csvfile: 
+                    writer=csv.writer(csvfile)
+                    header=[]
+                    header.append("matricula")
+                    header.append("nombre")
+                    header.append("primer_apellido")
+                    header.append("segundo_apellido")
+                    header.append("carrera")
+                    writer.writerow(header)
+                    datos=[]
+                    for i in range(0,tam):
+                        datos.append(result[i]['matricula'])
+                        datos.append(result[i]['nombre'])
+                        datos.append(result[i]['primer_apellido'])
+                        datos.append(result[i]['segundo_apellido'])
+                        datos.append(result[i]['carrera'])
+                        writer.writerow(datos)
+                        datos=[]
+                    almacen=[]
+                    almacen.append(matricula2)
+                    almacen.append(nombre)
+                    almacen.append(primer_apellido)
+                    almacen.append(segundo_apellido)
+                    almacen.append(carrera)
+                    writer.writerow(almacen)
+                print("okk")
+
+                result=[]
+                result2={}
+                with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        result.append(row)
+                        result2['app_version']=app_version
+                        result2['status']="200 ok"
+                        result2['alumnos']=result
+                return result2 
+        except Exception as e:
+            result={}
+            result['version']=app_version
+            result['status']="ErrorD"
+            return json.dumps(result)
