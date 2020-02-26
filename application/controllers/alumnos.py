@@ -3,7 +3,6 @@ import app
 import json
 import csv
 
-
 class Alumnos:
     file="/static/csv/alumnos.csv"
     app_version="0.1.0"
@@ -31,7 +30,7 @@ class Alumnos:
                     return json.dumps(result2)
                 elif datos['action']=="delete":
                     matricula=datos['matricula']
-                    result2=self.optionsearch(self.app_version,self.file,matricula)
+                    result2=self.optiondelete(self.app_version,self.file,matricula)
                     return json.dumps(result2)
                 elif datos['action']=="help":
                     help=datos['action']
@@ -98,29 +97,29 @@ class Alumnos:
     @staticmethod
     def optionput(app_version,file,matricula,nombre,primer_apellido,segundo_apellido,carrera):
         try:
-                result=[]
-                result3=[]
-                result2={}
-                result3.append(matricula)
-                result3.append(nombre)
-                result3.append(primer_apellido)
-                result3.append(segundo_apellido)
-                result3.append(carrera)
-                with open('static/csv/alumnos.csv','a',newline='') as csvfile: #a+ es de append,r es de read as csvfile= una variable cualquiera
-                    writer=csv.writer(csvfile)
-                    writer.writerow(result3)
-                with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
-                    reader = csv.DictReader(csvfile)
-                    for row in reader:
-                        result.append(row)
-                        result2['app_version']=app_version
-                        result2['status']="200 ok"
-                        result2['alumnos']=result
-                return result2 
+            result=[]
+            result3=[]
+            result2={}
+            result3.append(matricula)
+            result3.append(nombre)
+            result3.append(primer_apellido)
+            result3.append(segundo_apellido)
+            result3.append(carrera)
+            with open('static/csv/alumnos.csv','a',newline='') as csvfile: 
+                writer=csv.writer(csvfile)
+                writer.writerow(result3)
+            with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    result.append(row)
+                    result2['app_version']=app_version
+                    result2['status']="200 ok"
+                    result2['alumnos']=result
+            return result2 
         except Exception as e:
             result={}
             result['version']=app_version
-            result['status']="ErrorG"
+            result['status']="ErrorP"
             return json.dumps(result)
 
     @staticmethod
@@ -130,6 +129,9 @@ class Alumnos:
         result['status']="200 ok"
         result['get']='?token=xxxx&action=get'
         result['search']='?token=xxxx&action=search&matricula=xxxxxxxxxx'
+        result['put']="Para ayuda escribe ?token=xxxx&action=put&matricula='xxxxxxxxxx'&nombre=''&apellido1=''&apellido2=''&carrera=''"
+        result['delete']="Para ayuda escribe ?token=xxxx&action=delete&matricula='xxxxxxxxxx'"
+
         return result
 
     @staticmethod
@@ -140,23 +142,45 @@ class Alumnos:
                 with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
                     reader = csv.DictReader(csvfile)
                     for row in reader:
-                        if(matricula==row['matricula']):
-                            print(matricula)
-                            elemento=result2['matricula']
-                            result.remove(elemento)
+                        if(row['matricula']!=matricula):
                             result2['app_version']=app_version
                             result2['status']="200 ok"
-                            result2['borrar']="borrado"
-                            break
-                        TODO #ME Falta SEGUIR A DELETE TODO
-                        else:
-                            result2={}
-                            result2['status']="matricula no encontrada"
-                return result2 
+                            result.append(row)
+                            result2['alumnos']=result
+                tam=(len(result))
+                print(tam)
+                with open('static/csv/alumnos.csv','w',newline='') as csvfile: 
+                    writer=csv.writer(csvfile)
+                    header=[]
+                    header.append("matricula")
+                    header.append("nombre")
+                    header.append("primer_apellido")
+                    header.append("segundo_apellido")
+                    header.append("carrera")
+                    writer.writerow(header)
+                    datos=[]
+                    for i in range(0,tam):
+                        datos.append(result[i]['matricula'])
+                        datos.append(result[i]['nombre'])
+                        datos.append(result[i]['primer_apellido'])
+                        datos.append(result[i]['segundo_apellido'])
+                        datos.append(result[i]['carrera'])
+                        writer.writerow(datos)
+                        datos=[]
+                results=[]
+                results2={}
+                with open('static/csv/alumnos.csv','r') as csvfile:#a+ es de append,r es de read as csvfile= una variable cualquiera
+                    reader = csv.DictReader(csvfile)
+                    for row in reader:
+                        results.append(row)
+                        results2['app_version']=app_version
+                        results2['status']="200 ok"
+                        results2['alumnos']=result
+                return results2  
         except Exception as e:
             result={}
             result['version']=app_version
-            result['status']="ErrorS"
+            result['status']="ErrorD"
             return json.dumps(result)
-            
+    
 
