@@ -131,7 +131,6 @@ class Alumnos:
         result['search']='?token=xxxx&action=search&matricula=xxxxxxxxxx'
         result['put']="Para ayuda escribe ?token=xxxx&action=put&matricula='xxxxxxxxxx'&nombre=''&apellido1=''&apellido2=''&carrera=''"
         result['delete']="Para ayuda escribe ?token=xxxx&action=delete&matricula='xxxxxxxxxx'"
-
         return result
 
     @staticmethod
