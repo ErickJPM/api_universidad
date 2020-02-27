@@ -5,7 +5,7 @@ import csv
 
 class Alumnos:
 	file="/static/csv/alumnos.csv"
-
+	app_version="1.0.0"
 	def __init__(self):
 		pass
 
@@ -14,42 +14,36 @@ class Alumnos:
 			datos=web.input()
 			if datos['token']=="1234":
 				if datos['action']=="get":
-					app_version="0.1.0"
-					result2=self.optionget(app_version,self.file)
+					result2=self.optionget(self.app_version,self.file)
 					return json.dumps(result2)
 				elif datos['action']=="search":
-					app_version="0.2.0"
 					matricula=datos['matricula']
-					result2=self.optionsearch(app_version,self.file,matricula)
+					result2=self.optionsearch(self.app_version,self.file,matricula)
 					return json.dumps(result2)
 				elif datos['action']=="put":
-					app_version="0.3.0"
 					matricula=datos['matricula']
 					nombre=datos['nombre']
 					primer_apellido=datos['apellido1']
 					segundo_apellido=datos['apellido2']
 					carrera=datos['carrera']
-					result2=self.optionput(app_version,self.file,matricula,nombre,primer_apellido,segundo_apellido,carrera)
+					result2=self.optionput(self.app_version,self.file,matricula,nombre,primer_apellido,segundo_apellido,carrera)
 					return json.dumps(result2)
 				elif datos['action']=="delete":
-					app_version="0.4.0"
 					matricula=datos['matricula']
-					result2=self.optiondelete(app_version,self.file,matricula)
+					result2=self.optiondelete(self.app_version,self.file,matricula)
 					return json.dumps(result2)
 				elif datos['action']=="help":
 					app_version="1.0.0"
 					help=datos['action']
-					result=self.optionhelp(app_version,self.file,help)
+					result=self.optionhelp(self.app_version,self.file,help)
 					return json.dumps(result)
 				elif datos['action']=="update":
-					app_version="0.5.0"
 					matricula=datos['matricula']
-					matricula2=datos['matricula2']
 					nombre=datos['nombre']
 					primer_apellido=datos['apellido1']
 					segundo_apellido=datos['apellido2']
 					carrera=datos['carrera']
-					result2=self.optionupdate(app_version,self.file,matricula,matricula2,nombre,primer_apellido,segundo_apellido,carrera)
+					result2=self.optionupdate(self.app_version,self.file,matricula,nombre,primer_apellido,segundo_apellido,carrera)
 					return json.dumps(result2)
 				else:
 					result2={}
@@ -140,12 +134,13 @@ class Alumnos:
 	@staticmethod
 	def optionhelp(app_version,file,help):
 		result={}
-		result['version']=app_version
-		result['status']="200 ok"
-		result['get']='?token=xxxx&action=get'
-		result['search']='?token=xxxx&action=search&matricula=xxxxxxxxxx'
-		result['put']="Para ayuda escribe ?token=xxxx&action=put&matricula='xxxxxxxxxx'&nombre=''&apellido1=''&apellido2=''&carrera=''"
-		result['delete']="Para ayuda escribe ?token=xxxx&action=delete&matricula='xxxxxxxxxx'"
+		result['Version']=app_version
+		result['Status']="200 ok"
+		result['Get']='?token=xxxx&action=get'
+		result['Search']='?token=xxxx&action=search&matricula=xxxxxxxxxx'
+		result['Put']="Para ayuda escribe ?token=xxxx&action=put&matricula='xxxxxxxxxx'&nombre=''&apellido1=''&apellido2=''&carrera=''"
+		result['Delete']="Para ayuda escribe ?token=xxxx&action=delete&matricula='xxxxxxxxxx'"
+		result['Update']="Para ayuda escribe ?token=xxxx&action=update&matricula=xxxxxxxxxx&nombre=''&apellido1=''&apellido2=''&carrera=''"
 		return result
 
 	@staticmethod
@@ -199,7 +194,7 @@ class Alumnos:
 
 	
 	@staticmethod
-	def optionupdate(app_version,file,matricula,matricula2,nombre,primer_apellido,segundo_apellido,carrera):
+	def optionupdate(app_version,file,matricula,nombre,primer_apellido,segundo_apellido,carrera):
 		try:
 				result=[]
 				result2={}
@@ -231,13 +226,12 @@ class Alumnos:
 						writer.writerow(datos)
 						datos=[]
 					almacen=[]
-					almacen.append(matricula2)
+					almacen.append(matricula)
 					almacen.append(nombre)
 					almacen.append(primer_apellido)
 					almacen.append(segundo_apellido)
 					almacen.append(carrera)
 					writer.writerow(almacen)
-				print("okk")
 
 				result=[]
 				result2={}
